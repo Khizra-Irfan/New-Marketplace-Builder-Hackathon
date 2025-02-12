@@ -51,11 +51,16 @@ export default function Navbar() {
     <nav className="border-b border-gray-200">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
+
           {/* Search Icon (Desktop only) */}
           <div className="hidden lg:flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-500">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-gray-400 hover:text-gray-500"
+                >
                   <Search className="h-6 w-6" />
                   <span className="sr-only">Search</span>
                 </Button>
@@ -79,7 +84,11 @@ export default function Navbar() {
           <div className="hidden lg:flex items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-4 text-gray-400 hover:text-gray-500">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="ml-4 text-gray-400 hover:text-gray-500"
+                >
                   <ShoppingCart className="h-6 w-6" />
                   {cartItems.length > 0 && (
                     <span className="absolute top-1 right-1 bg-red-500 text-white text-xs rounded-full px-1.5">
@@ -108,7 +117,11 @@ export default function Navbar() {
             {/* User Profile */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-4 text-gray-400 hover:text-gray-500">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="ml-4 text-gray-400 hover:text-gray-500"
+                >
                   <User className="h-6 w-6" />
                   <span className="sr-only">User account</span>
                 </Button>
@@ -141,7 +154,11 @@ export default function Navbar() {
           <div className="flex lg:hidden items-center">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="text-gray-400 hover:text-gray-500">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="text-gray-400 hover:text-gray-500"
+                >
                   <Search className="h-6 w-6" />
                   <span className="sr-only">Search</span>
                 </Button>
@@ -154,55 +171,119 @@ export default function Navbar() {
             </DropdownMenu>
             <Sheet>
               <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="ml-4 text-gray-400 hover:text-gray-500">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="ml-4 text-gray-400 hover:text-gray-500"
+                >
                   <Menu className="h-6 w-6" />
                   <span className="sr-only">Open menu</span>
                 </Button>
               </SheetTrigger>
               <SheetContent side="right">
                 <nav className="flex flex-col space-y-4 mt-4">
-                  {navItems.map((item) => (
+                  {/* Page Links */}
+                  {["Home", "About", "Products", "Shopping Cart"].map((page) => (
                     <Link
-                      key={item}
-                      href="/products"
-                      className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out"
+                      key={page}
+                      href={page === "Home" ? "/" : `/${page.toLowerCase().replace(" ", "-")}`}
+                      className="text-gray-300 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out"
                     >
-                      {item}
+                      {page}
                     </Link>
                   ))}
+
+                  {/* Profile & Cart Icons (Mobile and Desktop) */}
+                  <div className="flex space-x-4">
+                    {/* Profile Dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="text-gray-200 hover:text-white">
+                          <User className="h-6 w-6" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        {isLoggedIn ? (
+                          <>
+                            <DropdownMenuItem>
+                              <Link href="/profile">Profile</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={() => setIsLoggedIn(false)}>
+                              Logout
+                            </DropdownMenuItem>
+                          </>
+                        ) : (
+                          <>
+                            <DropdownMenuItem>
+                              <Link href="/login" className="text-gray-200 hover:text-white">Login</Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem>
+                              <Link href="/signup" className="text-gray-200 hover:text-white">Sign Up</Link>
+                            </DropdownMenuItem>
+                          </>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    {/* Cart Dropdown */}
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="text-gray-200 hover:text-white">
+                          <ShoppingCart className="h-6 w-6" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="start">
+                        {cartItems.length > 0 ? (
+                          <>
+                            <DropdownMenuItem onClick={handleViewCart}>
+                              <Link href="/cart" className="text-gray-200 hover:text-white">
+                              View Cart ({cartItems.length} items)
+                              </Link>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleCheckout}>
+                            <Link href="/checkout" className="text-gray-200 hover:text-white">
+                              Checkout
+                              </Link>
+                            </DropdownMenuItem>
+                          </>
+                        ) : (
+                          <DropdownMenuItem disabled>Your cart is empty</DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </nav>
               </SheetContent>
             </Sheet>
           </div>
         </div>
 
-       {/* Desktop Navigation Links */}
-<div className="hidden lg:flex lg:items-center lg:justify-center flex-wrap gap-4">
-  {navItems.map((item) => (
-    <Link
-      key={item}
-      href="/products"
-      className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out"
-    >
-      {item}
-    </Link>
-  ))}
-</div>
+        {/* Desktop Navigation Links */}
+        <div className="hidden lg:flex lg:items-center lg:justify-center flex-wrap gap-4">
+          {navItems.map((item) => (
+            <Link
+              key={item}
+              href="/products"
+              className="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium transition-colors duration-200 ease-in-out"
+            >
+              {item}
+            </Link>
+          ))}
+        </div>
 
-{/* Pages Navigation Links */}
-<div className="hidden lg:flex lg:justify-center space-x-10 mt-2 border-t-2 font-sans pb-2">
-  {["Home", "About", "Products", "Shopping Cart"].map((page) => (
-    <Link
-      key={page}
-      href={page === "Home" ? "/" : `/${page.toLowerCase().replace(" ", "-")}`}
-      className={`text-sm font-medium uppercase transition-colors duration-200 ease-in-out mt-2
-                  ${page === "Home" ? "text-gray-500 hover:text-gray-900" : "text-gray-500 hover:text-gray-900"}`}
-    >
-      {page}
-    </Link>
-  ))}
-</div>
-
+        {/* Pages Navigation Links */}
+        <div className="hidden lg:flex lg:justify-center space-x-10 mt-2 border-t-2 font-sans pb-2">
+          {["Home", "About", "Products", "Shopping Cart"].map((page) => (
+            <Link
+              key={page}
+              href={page === "Home" ? "/" : `/${page.toLowerCase().replace(" ", "-")}`}
+              className={`text-sm font-medium uppercase transition-colors duration-200 ease-in-out mt-2
+                          ${page === "Home" ? "text-gray-500 hover:text-gray-900" : "text-gray-500 hover:text-gray-900"}`}
+            >
+              {page}
+            </Link>
+          ))}
+        </div>
 
       </div>
     </nav>
